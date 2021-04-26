@@ -8,6 +8,7 @@
     <title>User's Page</title>
 </head>
 <body>
+    <h2>Welcome <span th:text=${username}></span> To User's Details Page..</h2>
     <div th:if="${user != null}">
         <h2>This is <span th:text=${user.username}></span>'s page</h2>
         <p>Profile picture: </p>
@@ -20,7 +21,13 @@
     </div> 
     <div th:unless="${user != null}">
         <h2>Ooops, User Id Is Not Exist..</h2>
-    </div>   
+    </div>
+
+    <br>
+    <br>
+    <h4>
+        <a href="/perform_logout">Logout</a>
+    </h4>
 
 </body>
 </html>
