@@ -60,16 +60,33 @@ public class ApplicationUserController {
 //    }
 
     @GetMapping("/users/{id}")
-    public String getUserPage(Model m, @PathVariable long id){
+    public String getUserPage(Principal p,Model m, @PathVariable long id){
         try {
+            String username = p.getName();
             ApplicationUser user = applicationUserRepository.findById(id).get();
             m.addAttribute("user", user);
+            m.addAttribute("username", username);
             return "users";
         }
         catch(Exception e){
             return "users";
         }
-
     }
 
+    @GetMapping("/myprofile")
+    public RedirectView displayMyProfile(Principal p){
+        String name = p.getName();
+        ApplicationUser user = applicationUserRepository.findByUsername(name);
+        long id = user.getId();
+        return new RedirectView("/users/"+id);
+    }
+
+
+
+    @GetMapping("/")
+    public String getHomePage (Principal p,Model m){
+        if(p != null)
+             m.addAttribute("username",p.getName());
+        return ("index");
+    }
 }
