@@ -1,11 +1,11 @@
 package com.codefellowship.codefellowship;
 
+import org.hibernate.annotations.ManyToAny;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class ApplicationUser implements UserDetails {
@@ -22,6 +22,17 @@ public class ApplicationUser implements UserDetails {
     private String dateOfBirth;
     private String bio;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "users_users",
+            joinColumns = {
+                    @JoinColumn(name = "user_id", referencedColumnName = "id",
+                            nullable = false)},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "following_user_id", referencedColumnName = "id",
+                            nullable = false)})
+    private Set<ApplicationUser> users = new HashSet<>();
+
+
     @OneToMany(mappedBy="user",cascade=CascadeType.ALL)
     private List<Post> posts;
 
@@ -34,6 +45,23 @@ public class ApplicationUser implements UserDetails {
     }
 
     public ApplicationUser() {
+    }
+
+    public Set<ApplicationUser> getUsers() {
+        return users;
+    }
+
+
+    public void addFollowToUser(ApplicationUser user){
+        this.users.add(user);
+    }
+
+    public void unFollowUser(ApplicationUser user){
+        this.users.remove(user);
+    }
+
+    public boolean isFollowedUser(ApplicationUser user){
+        return this.users.contains(user);
     }
 
     public ApplicationUser(String username, String password, String firstName, String lastName, String dateOfBirth, String bio) {

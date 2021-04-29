@@ -63,15 +63,43 @@ public class ApplicationUserController {
     public String getUserPage(Principal p,Model m, @PathVariable long id){
         try {
             String username = p.getName();
+            ApplicationUser currentUser = applicationUserRepository.findByUsername(username);
             ApplicationUser user = applicationUserRepository.findById(id).get();
+            System.out.println(currentUser.getUsers());
+            // if followed see the button as un follow..
+            boolean isFollowed = currentUser.isFollowedUser(user);
+            boolean isSameUser = false;
+            if(username.equals(user.getUsername()))
+                isSameUser = true;
             m.addAttribute("user", user);
+            m.addAttribute("isSameUser", isSameUser);
             m.addAttribute("username", username);
+            m.addAttribute("isFollowed", isFollowed);
             return "users";
         }
         catch(Exception e){
             return "users";
         }
     }
+
+    @PostMapping("/followUser/{username}")
+    public RedirectView followUser(Principal p,@PathVariable String username){
+        ApplicationUser currentUser = applicationUserRepository.findByUsername(p.getName());
+        ApplicationUser userWantedToFollow = applicationUserRepository.findByUsername(username);
+        currentUser.addFollowToUser(userWantedToFollow);
+        applicationUserRepository.save(currentUser);
+        return new RedirectView("/users/"+userWantedToFollow.getId());
+    }
+    @PostMapping("/unfollowUser/{username}")
+    public RedirectView unFollowUser(Principal p,@PathVariable String username){
+        ApplicationUser currentUser = applicationUserRepository.findByUsername(p.getName());
+        ApplicationUser userWantedToUnFollow = applicationUserRepository.findByUsername(username);
+        currentUser.unFollowUser(userWantedToUnFollow);
+        applicationUserRepository.save(currentUser);
+        return new RedirectView("/users/"+userWantedToUnFollow.getId());
+    }
+
+
 
     @GetMapping("/myprofile")
     public RedirectView displayMyProfile(Principal p){
