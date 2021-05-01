@@ -36,7 +36,6 @@ public class PostController {
         ApplicationUser user = applicationUserRepository.findByUsername(username);
         List<Long> ids = user.getUsers().stream().map(u -> u.getId()).collect(Collectors.toList());
         List < List<Post> > postsOfUsers = ids.stream().map(i -> postRepository.findAllByUserId(i)).collect(Collectors.toList());
-        System.out.println(postsOfUsers);
         m.addAttribute("postsOfUsers",postsOfUsers);
         m.addAttribute("username",p.getName());
         return "feed";
