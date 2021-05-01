@@ -48,16 +48,12 @@ public class ApplicationUserController {
         return new RedirectView("/login");
     }
 
+
     @GetMapping("/login")
     public String getLoginPage(){
         return "login";
     }
 
-//    @GetMapping("/profile")
-//    public String getUserProfilePage(Principal p, Model m){
-//        m.addAttribute("user", ((UsernamePasswordAuthenticationToken)p).getPrincipal());
-//        return "profile";
-//    }
 
     @GetMapping("/users/{id}")
     public String getUserPage(Principal p,Model m, @PathVariable long id){

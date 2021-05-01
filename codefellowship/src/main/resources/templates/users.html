@@ -5,41 +5,164 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            background: linear-gradient(to left, rgb(163, 182, 200), rgb(200, 191, 191));
+        }
+
+        h1 span,
+        h2 span {
+            color: maroon;
+        }
+
+        h2,
+        h1 {
+            font-size: 1.8em;
+            color: black;
+            font-style: italic;
+            text-align: center;
+            width: 65%;
+            padding-bottom: 15px;
+            margin: 0 auto;
+            border-bottom: 2px solid rgba(27, 27, 27, 0.623);
+        }
+
+        nav ul li {
+            display: inline-block;
+            margin: 10px;
+        }
+
+        nav {
+            margin-top: 0;
+            padding: 0;
+            margin-bottom: 20px;
+            width: 100%;
+            height: 60px;
+            line-height: 30px;
+            background-color: rgba(88, 43, 43, 0.575);
+            padding-left: 20px;
+
+        }
+
+        nav ul {
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li a {
+            color: black;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+
+        nav ul li a:hover {
+            color: rgba(228, 220, 220, 0.726);
+            text-decoration: underline;
+            font-size: 1.3em;
+        }
+
+        div.cont {
+            width: 60%;
+            margin: auto;
+            margin-top: 25px;
+            font-size: 1.4em;
+            text-align: center
+        }
+
+        div.cont h2 {
+            color: maroon;
+            text-decoration: none;
+            font-size: 1.3em;
+            text-align: center;
+            border-bottom: none;
+        }
+
+        div.cont div a:hover {
+            color: rgba(27, 12, 12, 0.726);
+            text-decoration: none;
+
+
+        }
+        div.cont h3{
+            color:black;
+            font-size:1.7em;
+            font-style: italic;
+
+        }
+        div.cont p span{
+            color:maroon;
+            font-weight: bold;
+        }
+        div.cont img{
+            width:100px;
+            height:100px;
+        }
+
+        p.crated {
+            font-size: .6em;
+            font-weight: bold;
+        }
+        #button_follow{
+            width:150px;
+            height: 50px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    </style>
     <title>User's Page</title>
 </head>
+
 <body>
-    <div th:if="${isSameUser == false && isFollowed == false }">
-        <form method="POST" th:action="@{/followUser/{username}(username = ${user.username})}">
-            <input type="submit" value="Follow">
-        </form>
-    </div>
-    <div th:if="${isSameUser == false && isFollowed == true }">
-        <form method="POST" th:action="@{/unfollowUser/{username}(username = ${user.username})}">
-            <input type="submit" value="UnFollow">
-        </form>
-    </div>
-    <h2>Welcome <span th:text=${username}></span> To User's Details Page..</h2>
-    <div th:if="${user != null}">
-        <h2>This is <span th:text=${user.username}></span>'s page</h2>
-        <p>Profile picture: </p>
-        <img src="https://www.computerhope.com/jargon/g/guest-user.jpg" alt="user's image">
-        <p>Username: <span th:text=${user.username}></span></p>
-        <p>First Name: <span th:text=${user.firstName}></span></p>
-        <p>Last Name: <span th:text=${user.lastName}></span></p>
-        <p>Date Of Birth: <span th:text=${user.dateOfBirth}></span></p>
-        <p>Bio: <span th:text=${user.bio}></span></p>
-    </div> 
-    <div th:unless="${user != null}">
-        <h2>Ooops, User Id Is Not Exist..</h2>
+
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/myprofile">My profile</a></li>
+            <li><a href="/profile">My Posts</a></li>
+            <li><a href="/addPost">Add a new post</a></li>
+            <li><a href="/users/1">User's Page</a></li>
+            <li><a href="/feed">My Feed's page</a></li>
+            <li><a href="/perform_logout">Logout</a></li>
+        </ul>
+    </nav>
+
+
+    <h1>Welcome <span th:text=${username}></span> To User's Details Page..</h1>
+    <div class="cont">
+        <div th:if="${isSameUser == false && isFollowed == false }">
+            <form method="POST" th:action="@{/followUser/{username}(username = ${user.username})}">
+                <input id="button_follow" type="submit" value="Follow">
+            </form>
+        </div>
+        <div th:if="${isSameUser == false && isFollowed == true }">
+            <form method="POST" th:action="@{/unfollowUser/{username}(username = ${user.username})}">
+                <input id="button_follow" type="submit" value="UnFollow">
+            </form>
+        </div>
+
+
+        <div th:if="${user != null}">
+            <h3>This is <span th:text=${user.username}></span>'s page</h3>
+            <p>Profile picture: </p>
+            <img src="https://www.computerhope.com/jargon/g/guest-user.jpg" alt="user's image">
+            <p>Username: <span th:text=${user.username}></span></p>
+            <p>First Name: <span th:text=${user.firstName}></span></p>
+            <p>Last Name: <span th:text=${user.lastName}></span></p>
+            <p>Date Of Birth: <span th:text=${user.dateOfBirth}></span></p>
+            <p>Bio: <span th:text=${user.bio}></span></p>
+        </div>
+        <div th:unless="${user != null}">
+            <h2>Ooops, User Id Is Not Exist..</h2>
+        </div>
     </div>
 
-    <h4>
-        <br>
-        <br>
-        <a href="/">Home page</a>
-        <br>
-        <a href="/perform_logout">Logout</a>
-    </h4>
+
+
 
 </body>
+
 </html>
